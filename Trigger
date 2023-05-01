@@ -1,0 +1,29 @@
+--TRIGGER
+SET SERVEROUTPUT ON;
+CREATE OR REPLACE TRIGGER CHECK_BLOOD_GROUP_MATCH
+AFTER INSERT OR UPDATE ON patient
+FOR EACH ROW
+DECLARE
+v_blood_group donor.blood_group%TYPE;
+BEGIN
+SELECT blood_group INTO v_blood_group FROM donor
+WHERE blood_group = :NEW.blood_group;
+
+IF v_blood_group IS NOT NULL THEN
+DBMS_OUTPUT.PUT_LINE('Warning: A donor with a matching blood group has been found.');
+END IF;
+EXCEPTION
+WHEN NO_DATA_FOUND THEN DBMS_OUTPUT.PUT_LINE('No matching donor found.');
+END;
+/
+--INSERT ROW
+INSERT INTO patient (p_id, p_name, p_gender, Blood_Group, Disease, p_phno, p_address)
+VALUES (111, 'JOHN M SMITH', 'M', 'B', 'CARDIAC DISEASE', 1234567890, 'GOA');
+SELECT * FROM PATIENT;
+--DELETE ROW
+DELETE FROM PATIENT WHERE p_id=111;
+
+
+SELECT * FROM PATIENT;
+
+ 
