@@ -1,0 +1,42 @@
+-- TABLE
+CREATE TABLE patient
+       (p_id   INT  NOT NULL,
+        p_name   VARCHAR(30) NOT NULL,
+        p_gender VARCHAR(1) CHECK (p_gender in('M','F','O')),
+        Blood_Group   VARCHAR(4)  NOT NULL,
+        Disease VARCHAR(20),
+        p_phno NUMBER(10,0),
+        p_address  VARCHAR(45),
+        CONSTRAINT Patient_PK  PRIMARY KEY(p_id));
+SELECT * FROM PATIENT;
+
+ 
+
+CREATE TABLE Donor
+    (d_id   INT  NOT NULL,
+     d_name VARCHAR(30) NOT NULL,
+     d_age INT CHECK (d_age >= 18) NOT NULL,
+     d_Address VARCHAR(45),
+     d_gender VARCHAR(1) CHECK (d_gender in('M','F','O')),
+     d_phno  NUMBER(10,0),
+     Blood_Group   VARCHAR(8)  NOT NULL,
+     last_donated_date DATE,
+     bmi NUMBER CHECK(bmi >=20),
+     CONSTRAINT Donor_PK PRIMARY KEY (d_id));
+SELECT * FROM DONOR;
+
+ 
+
+CREATE TABLE blood_bank
+    (b_id INT  NOT NULL,
+     b_name    VARCHAR(50)     NOT NULL,
+     b_address VARCHAR(45),
+     b_phno Number(10,0),
+     total_units INT,
+     total_capacity INT,
+     d_id INT,
+     p_id INT,
+     CONSTRAINT blood_bank_PK PRIMARY KEY (b_id),
+     CONSTRAINT blood_bank_FK1 FOREIGN KEY (d_id)  REFERENCES Donor(d_id),
+     CONSTRAINT blood_bank_FK2 FOREIGN KEY (p_id) REFERENCES Patient(p_id));
+SELECT * FROM blood_bank;
