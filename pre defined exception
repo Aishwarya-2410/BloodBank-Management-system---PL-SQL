@@ -1,0 +1,27 @@
+
+-- EXCEPTION
+
+ 
+
+SET SERVEROUTPUT ON;
+DECLARE
+e_name donor.d_name%TYPE;
+e_bg donor.blood_group%TYPE:='A+';
+e_age donor.d_age%TYPE;
+e_gender donor.d_gender%TYPE;
+e_lastdonate donor.last_donated_date%TYPE;
+
+ 
+
+BEGIN
+SELECT d_name INTO e_name FROM donor WHERE blood_group=e_bg; 
+DBMS_OUTPUT.PUT_LINE('NAME:'|| e_name ||' BLOOD GROUP:'|| e_bg);
+EXCEPTION
+WHEN no_data_found THEN
+DBMS_OUTPUT.PUT_LINE('donor not available'); 
+WHEN too_many_rows THEN
+DBMS_OUTPUT.PUT_LINE('More than one donor available ');
+WHEN others THEN 
+DBMS_OUTPUT.PUT_LINE('something went wrong!');  
+END; 
+/
