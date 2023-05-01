@@ -1,0 +1,15 @@
+--USER DEFINED EXCEPTION
+SET SERVEROUTPUT ON;
+DECLARE
+e_age donor.d_age%TYPE;
+e_gender donor.d_gender%TYPE;
+raise_my_exception EXCEPTION;
+PRAGMA exception_init( raise_my_exception, -20001 );
+result varchar(20);
+BEGIN
+SELECT d_gender INTO e_gender from donor WHERE d_id = 33;
+IF e_age>=18 and e_gender ='M' THEN
+raise raise_my_exception;
+END IF;
+END;
+/
