@@ -1,0 +1,11 @@
+--VIEW 
+SET SERVEROUTPUT ON;
+CREATE OR REPLACE VIEW BLOOD_GROUP_DETAILS_VIEW AS
+SELECT d.d_name,d.d_age,d.blood_group,p.p_name,p.p_address,p.blood_group as needed_blood,b.b_name,b.total_units FROM donor d
+LEFT JOIN blood_bank b
+ON d.d_id = b.d_id
+LEFT JOIN patient p 
+ON p.blood_group = d.blood_group
+WHERE d.d_age >=18 AND d.last_donated_date <= ADD_MONTHS(SYSDATE,-3) AND d.blood_group ='A+'
+ORDER BY d.d_name ASC;
+SELECT * FROM BLOOD_GROUP_DETAILS_VIEW;
