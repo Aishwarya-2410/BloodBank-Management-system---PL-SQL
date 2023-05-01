@@ -1,0 +1,21 @@
+--PROCEDURE
+SET SERVEROUTPUT ON;
+CREATE OR REPLACE PROCEDURE PATIENT_CURSOR_PROC AS
+CURSOR patient_cursor IS SELECT p_id,p_name,p_gender FROM patient
+WHERE p_id <=106 AND p_gender = 'M' 
+ORDER BY p_id;
+pat_id patient.p_id%TYPE;
+pat_name patient.p_name%TYPE;
+gender patient.p_gender%TYPE;
+BEGIN
+OPEN patient_cursor;
+LOOP
+FETCH patient_cursor INTO pat_id,pat_name,gender;
+EXIT WHEN patient_cursor%NOTFOUND;
+DBMS_OUTPUT.PUT_LINE('PATIENT ID : '|| pat_id||' PATIENT NAME: '||pat_name||' GENDER: '||gender);
+END LOOP;
+DBMS_OUTPUT.PUT_LINE('DATA FETCHED SUCCESSFULLY');
+CLOSE patient_cursor;
+END PATIENT_CURSOR_PROC;
+/
+EXEC PATIENT_CURSOR_PROC;
