@@ -1,0 +1,41 @@
+--AUDIT TRIGGER
+set serveroutput on;
+CREATE TABLE patient_audit (id INT PRIMARY KEY,user_name VARCHAR(20), date_changed DATE,
+old_p_address VARCHAR2(20), new_p_address VARCHAR2(20), operation CHAR(1));
+--drop table patient_audit;
+CREATE SEQUENCE patient_audit_seq ;
+CREATE OR REPLACE TRIGGER patient_audit_trg
+AFTER
+INSERT OR UPDATE OR DELETE
+ON patient
+FOR EACH ROW
+DECLARE
+l_transaction VARCHAR2(10);
+BEGIN
+l_transaction := CASE
+WHEN INSERTING THEN 'I'
+WHEN UPDATING THEN 'U'
+WHEN DELETING THEN 'D'
+END;
+-- insert a row into the audit table
+INSERT INTO patient_audit
+VALUES(patient_audit_seq.nextval,USER, SYSDATE, :OLD.p_address, :NEW.p_address,l_transaction);
+END;
+/
+--insert
+INSERT INTO patient(p_id,p_name,p_address) VALUES(107,'AISHWARYA','DINDIGUL');
+SELECT * FROM patient_audit;
+--update
+UPDATE patient SET p_address='MADURAI' WHERE p_id=106;
+--delete
+DELETE FROM patient where p_id=107;
+SELECT * FROM patient;
+
+ 
+
+
+DROP SEQUENCE patient_audit_seq;
+DROP TABLE PATIENT_AUDIT;
+DROP TRIGGER PATIENT_AUDIT_TRG;
+
+ 
